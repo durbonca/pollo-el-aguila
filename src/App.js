@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { Formik, Form, Field } from 'formik';
+import { TextField, Button } from '@material-ui/core';
 
 function App() {
+
+  const initial = {
+    name: '',
+    address: '',
+    date: '',
+    phone: '',
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Formik
+        onSubmit={values => console.log(values)}
+        initialValues={initial}
+      >
+        <Form>
+          <Field
+            name="name"
+            label="Nombre"
+            as={TextField}
+          />
+          <Field
+            name="address"
+            label="Dirección"
+            as={TextField}
+          />
+          <Field
+            name="phone" 
+            label="Telefono"
+            as={TextField}
+          />
+        <Button type="submit" variant="contained" color="primary" size="large">
+          Hacer Pedido
+        </Button>
+        </Form>
+      </Formik>
     </div>
   );
 }
