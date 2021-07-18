@@ -1,7 +1,12 @@
+import { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { TextField, Button } from '@material-ui/core';
+import { db } from './firebase';
+import { Product } from './components/Product';
 
 function App() {
+
+  const [products, setProducts] = useState([]);
 
   const initial = {
     name: '',
@@ -10,8 +15,40 @@ function App() {
     phone: '',
   }
 
+  const getProducts = async () => {
+    const newProducts = [];
+    await db.collection("productos").get().then((querySnapshot) => {
+      querySnapshot.forEach( (doc) => {
+          let { nombre, descripcion, precio, foto  } = doc.data();
+          let id = doc.id;
+          newProducts.push({
+            id,
+            nombre,
+            descripcion,
+            precio,
+            foto
+          });
+        });
+        setProducts(newProducts);
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  useEffect( () => { getProducts() } , [])
+
   return (
     <div className="App">
+      
+      { products.map( product => (
+          <Product
+            key={product.id}
+            product={product}
+          /> 
+          )
+        ) 
+      }
+
       <Formik
         onSubmit={values => console.log(values)}
         initialValues={initial}
