@@ -1,4 +1,5 @@
-import { Card, CardHeader, CardMedia, CardContent, Typography, CardActions } from "@material-ui/core";
+import { useState } from 'react'
+import { Card, CardHeader, CardMedia, CardContent, Typography, CardActions, IconButton } from "@material-ui/core";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,16 +9,22 @@ const useStyles = makeStyles((theme) => ({
         height: 0,
         paddingTop: '56.25%', // 16:9
       },
+    card: {
+        width: "325px", 
+        margin: "1.5rem auto"
+    },
     buttonPrimary: {
         cursor: 'pointer',
         color: theme.palette.primary.main,
-        margin: '0 5px',
-        height: '1.5rem',
+        
     },
     buttonSecondary: {
         cursor: 'pointer',
         color: theme.palette.secondary.main,
-        margin: '0 5px'
+    },
+    count: {
+      margin: '0 0.5rem',
+      width : '10%'
     },
     row: {
         display: 'flex',
@@ -30,33 +37,52 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '25%'
+        alignItems: 'center',
+        marginRight: '0.5rem',
     }
 }));
 
-export function Product({product}) {
+export function Product({ product, handleProduct }) {
     const classes = useStyles();
+    const { id, nombre, descripcion, precio, foto, stock } = product;
+    const [count, setCount] = useState(0);
+
+    const handleCount = (handler) => {
+        handler ? setCount(count + 1) : count !== 0 && setCount(count - 1) 
+    }
 
     return (
-        <Card style={{width: "33%", margin: "0 auto"}}>
-            <CardHeader title={product.nombre} />
+        <Card className={classes.card}>
+            <CardHeader title={nombre} />
             <CardMedia
                 className={classes.media}
-                title={product.nombre}
-                image={product.foto}
+                title={nombre}
+                image={foto}
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                {product.descripcion}
+                {descripcion}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
                 <div className={classes.row} >
-                    <p>$ {product.precio}</p>
+                    <h3>$ {precio}</h3>
                     <div className={classes.buttonContainer}>
-                        <RemoveCircleIcon onClick={() => {alert('sacar producato')}} className={classes.buttonSecondary}/>
-                        <AddCircleIcon onClick={() => {alert('agregar producato')}} className={classes.buttonPrimary}/>
+                        <IconButton 
+                            aria-label="delete"
+                            className={classes.buttonSecondary} 
+                            onClick={() => { handleCount(false); handleProduct(id, false)} }
+                        >
+                            <RemoveCircleIcon fontSize="large" />
+                        </IconButton>
+                        <IconButton
+                            aria-label="add"
+                            className={classes.buttonPrimary}  
+                            onClick={() => { handleCount(true); handleProduct(id, true)}}>
+                            <AddCircleIcon fontSize="large" />                        
+                        </IconButton>
                     </div>
+                    <h1 className={classes.count}>{count}</h1>
                 </div>
             </CardActions>   
         </Card>

@@ -7,6 +7,7 @@ import { Product } from './components/Product';
 function App() {
 
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
 
   const initial = {
     name: '',
@@ -35,6 +36,13 @@ function App() {
     );
   }
 
+  const handleProduct = (id, handler) => {
+    let newCart = cart
+    handler ? newCart.push(id) : newCart.splice(newCart.indexOf(id), 1);
+    setCart(newCart);
+    console.log(cart);
+  }
+
   useEffect( () => { getProducts() } , [])
 
   return (
@@ -44,10 +52,13 @@ function App() {
           <Product
             key={product.id}
             product={product}
+            handleProduct={handleProduct}
           /> 
           )
         ) 
       }
+
+      <h1>RESUMEN DEL PEDIDO</h1>
 
       <Formik
         onSubmit={values => console.log(values)}
