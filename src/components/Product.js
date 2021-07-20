@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Product({ product, handleProduct }) {
     const classes = useStyles();
-    const { id, nombre, descripcion, precio, foto, stock } = product;
+    const { id, nombre, descripcion, precio, foto } = product;
     const [count, setCount] = useState(0);
 
     const handleCount = (handler) => {
